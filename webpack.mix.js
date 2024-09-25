@@ -1,20 +1,18 @@
 const mix = require('laravel-mix')
-const tailwindcss = require('tailwindcss')
-const webpack = require('webpack')
 
 mix.webpackConfig({
-   plugins: [
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-   ]
+    resolve: {
+        alias: {
+            'vue$': 'vue/dist/vue.common.js'
+        }
+    }
 })
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css')
-   .options({
-      processCssUrls: false,
-      postCss: [ tailwindcss() ],
-   })
+mix.js('resources/js/app.js', 'public/js').vue()
+    .postCss('resources/css/app.css', 'public/css', [
+        require('tailwindcss')
+    ])
 
 if (mix.inProduction()) {
-   mix.version()
+    mix.version()
 }
